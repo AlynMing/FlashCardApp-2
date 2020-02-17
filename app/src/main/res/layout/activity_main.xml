@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mybrown"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/card_question"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:gravity="center"
+        android:background="@drawable/card_background"
+        android:elevation="5sp"
+        android:text="What is the name of the former United States President?"
+        android:textSize="40sp" />
+
+    <TextView
+        android:id="@+id/card_answer"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:gravity="center"
+        android:elevation="5sp"
+        android:background="@drawable/card_background"
+        android:text="Barack Obama"
+        android:textSize="40sp"
+        android:textColor="@color/mybrown"
+        android:visibility="invisible" />
+
+    <ImageView
+        android:id="@+id/toggle_choices_visibility"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="249dp"
+        android:src="@drawable/ic_change_icon" />
+
+</RelativeLayout>
