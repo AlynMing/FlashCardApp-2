@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">FlashCardApp</string>
+    <string name="question_hint">Enter the Question here</string>
+    <string name="answer1_hint">Enter Correct Answer here</string>
+    <string name="answer2_hint">Enter Wrong Answer here</string>
+    <string name="answer3_hint">Enter Wrong Answer here</string>
 </resources>

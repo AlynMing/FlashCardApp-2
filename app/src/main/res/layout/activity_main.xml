@@ -14,21 +14,8 @@
         android:gravity="center"
         android:background="@drawable/card_background"
         android:elevation="5sp"
-        android:text="What is the name of the former United States President?"
+        android:text="What is the name of the immediate former United States President?"
         android:textSize="40sp" />
-
-    <ImageView
-        android:id="@+id/add_card"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="657dp"
-        android:layout_marginEnd="38dp"
-        android:layout_marginBottom="34dp"
-        android:src="@drawable/ic_add_icon" />
 
     <TextView
         android:id="@+id/card_answer"
@@ -42,13 +29,64 @@
         android:textColor="@color/mybrown"
         android:visibility="invisible" />
 
+
     <ImageView
         android:id="@+id/toggle_choices_visibility"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="550dp"
+        android:src="@drawable/ic_change_icon" />
+
+    <ImageView
+        android:id="@+id/plus_card"
+        android:layout_width="51dp"
+        android:layout_height="44dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="350dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="15dp"
+        android:src="@drawable/ic_plus_icon" />
+
+    <TextView
+        android:id="@+id/answer1"
+        android:layout_width="235dp"
+        android:layout_height="30dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="249dp"
-        android:src="@drawable/ic_change_icon" />
+        android:layout_marginTop="304dp"
+        android:background="@color/ans1"
+        android:text="Bill Clinton"
+        android:textAlignment="center"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/answer2"
+        android:layout_width="235dp"
+        android:layout_height="30dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="51dp"
+        android:layout_marginBottom="321dp"
+        android:background="@color/ans2"
+        android:text="Barack Obama"
+        android:textAlignment="center"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/answer3"
+        android:layout_width="256dp"
+        android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="226dp"
+        android:background="@color/ans3"
+        android:text="Jeff Bezos"
+        android:textAlignment="center"
+        android:textSize="24sp" />
 
 </RelativeLayout>
