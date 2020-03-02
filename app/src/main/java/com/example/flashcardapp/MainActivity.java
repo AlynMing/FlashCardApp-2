@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
 
             ArrayList<String> answers = data.getExtras().getStringArrayList("answers");
 
-            Collections.shuffle(answers);
+            Collections.shuffle(answers); //to shuffle the answers
 
             ((TextView) findViewById(R.id.card_question)).setText(data.getExtras().getString("question"));
             ((TextView) findViewById(R.id.answer1)).setText(answers.get(0));
