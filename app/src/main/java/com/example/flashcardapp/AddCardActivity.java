@@ -37,7 +37,7 @@ public class AddCardActivity extends AppCompatActivity {
                 answers.add(((EditText) findViewById(R.id.answer3)).getText().toString());
 
                 if(!isValid(answers, question)){
-                    Toast.makeText(getApplicationContext(), "Must enter data into all fields", Toast.LENGTH_SHORT).show();
+
                 }else{
                     Intent getNew = new Intent();
                     getNew.putExtra("question", question);
@@ -46,7 +46,7 @@ public class AddCardActivity extends AppCompatActivity {
                     setResult(RESULT_OK, getNew);
                     finish();
                 }
-
+                Toast.makeText(getApplicationContext(), "Must enter data into all fields", Toast.LENGTH_SHORT).show();
             }
         });
     }
