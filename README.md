@@ -1,6 +1,6 @@
 ## FlashCardApp (Unobliviate)
 
-## Lab 2
+ Lab 2
 
 ### App Description
 This is an android application that is used to simulate a Flashcard.
