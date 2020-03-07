@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -38,25 +40,14 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.toggle_choices_visibility).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isShowingAnswer){
-                    findViewById(R.id.answer1).setVisibility(View.INVISIBLE);
-                    findViewById(R.id.answer2).setVisibility(View.INVISIBLE);
-                    findViewById(R.id.answer3).setVisibility(View.INVISIBLE);
-                    isShowingAnswer = false;
+                changeVisibility();
+            }
+        });
 
-                    //change colors
-                    findViewById(R.id.answer1).setBackgroundColor(getResources().getColor(R.color.ans1));
-                    findViewById(R.id.answer2).setBackgroundColor(getResources().getColor(R.color.ans2));
-                    findViewById(R.id.answer3).setBackgroundColor(getResources().getColor(R.color.ans3));
-
-                }
-                else{
-                    findViewById(R.id.answer1).setVisibility(View.VISIBLE);
-                    findViewById(R.id.answer2).setVisibility(View.VISIBLE);
-                    findViewById(R.id.answer3).setVisibility(View.VISIBLE);
-
-                    isShowingAnswer = true;
-                }
+        findViewById(R.id.card_question).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeVisibility();
             }
         });
 
@@ -85,6 +76,28 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void changeVisibility(){
+        if(isShowingAnswer){
+            findViewById(R.id.answer1).setVisibility(View.INVISIBLE);
+            findViewById(R.id.answer2).setVisibility(View.INVISIBLE);
+            findViewById(R.id.answer3).setVisibility(View.INVISIBLE);
+            isShowingAnswer = false;
+
+            //change colors
+            findViewById(R.id.answer1).setBackgroundColor(getResources().getColor(R.color.ans1));
+            findViewById(R.id.answer2).setBackgroundColor(getResources().getColor(R.color.ans2));
+            findViewById(R.id.answer3).setBackgroundColor(getResources().getColor(R.color.ans3));
+
+        }
+        else{
+            findViewById(R.id.answer1).setVisibility(View.VISIBLE);
+            findViewById(R.id.answer2).setVisibility(View.VISIBLE);
+            findViewById(R.id.answer3).setVisibility(View.VISIBLE);
+
+            isShowingAnswer = true;
+        }
+    }
+
     private void checkCorrect(TextView t){
         if(answer.equals(t.getText().toString())) {
             t.setBackgroundColor(getResources().getColor(R.color.green));
@@ -108,8 +121,11 @@ public class MainActivity extends AppCompatActivity {
 
             answer = data.getExtras().getString("correctAnswer");
 
-            Toast.makeText(getApplicationContext(), "Card Successfully Changed!", Toast.LENGTH_SHORT).show();
-
+            //Toast.makeText(getApplicationContext(), "Card Successfully Changed!", Toast.LENGTH_SHORT).show();
+            Snackbar.make(findViewById(R.id.card_question),
+                    "Card Successfully Changed!",
+                    Snackbar.LENGTH_SHORT)
+                    .show();
         }
     }
 }
