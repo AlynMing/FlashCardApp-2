@@ -16,4 +16,4 @@ This is an android application that is used to simulate a Flashcard.
 - [X] User can delete a card and no longer see it in their deck anymore
 - [ ] Flashcards are shown in random order instead of the order they were created in
 - [ ] User can edit a card and see the edit saved when they browse through their deck of cards
-- [ ] User can create flashcards with multiple answers and be able to browse through cards with multiple choice answers shown
+- [X] User can create flashcards with multiple answers and be able to browse through cards with multiple choice answers shown
