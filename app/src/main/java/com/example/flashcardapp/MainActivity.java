@@ -39,10 +39,7 @@ public class MainActivity extends AppCompatActivity {
             noFlashCards = true;
         }
 
-        findViewById(R.id.answer1).setVisibility(View.INVISIBLE);
-        findViewById(R.id.answer2).setVisibility(View.INVISIBLE);
-        findViewById(R.id.answer3).setVisibility(View.INVISIBLE);
-        isShowingAnswer = false;
+        makeInvisible();
 
         findViewById(R.id.plus_card).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,19 +98,9 @@ public class MainActivity extends AppCompatActivity {
                     if (currrentCardDisplayedIndex > allFlashCards.size() - 1) {
                         currrentCardDisplayedIndex = 0;
                     }
-
-                    // set the question and answer TextViews with data from the database
-                    ((TextView) findViewById(R.id.card_question)).setText(allFlashCards.get(currrentCardDisplayedIndex).getQuestion());
-                    ((TextView) findViewById(R.id.answer1)).setText(allFlashCards.get(currrentCardDisplayedIndex).getAnswer());
-                    ((TextView) findViewById(R.id.answer2)).setText(allFlashCards.get(currrentCardDisplayedIndex).getWrongAnswer1());
-                    ((TextView) findViewById(R.id.answer3)).setText(allFlashCards.get(currrentCardDisplayedIndex).getWrongAnswer2());
+                    setNextCard();
                     answer = allFlashCards.get(currrentCardDisplayedIndex).getAnswer();
-
-                    //change colors
-                    findViewById(R.id.answer1).setBackgroundColor(getResources().getColor(R.color.ans1));
-                    findViewById(R.id.answer2).setBackgroundColor(getResources().getColor(R.color.ans2));
-                    findViewById(R.id.answer3).setBackgroundColor(getResources().getColor(R.color.ans3));
-
+                    changeAnswerColors();
                 }
             }
         });
@@ -129,52 +116,64 @@ public class MainActivity extends AppCompatActivity {
                     if (currrentCardDisplayedIndex > allFlashCards.size() - 1) {
                         currrentCardDisplayedIndex = 0;
                     }
-
-                    // set the question and answer TextViews with data from the database
-                    ((TextView) findViewById(R.id.card_question)).setText(allFlashCards.get(currrentCardDisplayedIndex).getQuestion());
-                    ((TextView) findViewById(R.id.answer1)).setText(allFlashCards.get(currrentCardDisplayedIndex).getAnswer());
-                    ((TextView) findViewById(R.id.answer2)).setText(allFlashCards.get(currrentCardDisplayedIndex).getWrongAnswer1());
-                    ((TextView) findViewById(R.id.answer3)).setText(allFlashCards.get(currrentCardDisplayedIndex).getWrongAnswer2());
+                    setNextCard();
                 }else{
-                    ((TextView) findViewById(R.id.card_question)).setText("Add a FlashCard");
-                    ((TextView) findViewById(R.id.answer1)).setText("");
-                    ((TextView) findViewById(R.id.answer2)).setText("");
-                    ((TextView) findViewById(R.id.answer3)).setText("");
-
-                    findViewById(R.id.answer1).setVisibility(View.INVISIBLE);
-                    findViewById(R.id.answer2).setVisibility(View.INVISIBLE);
-                    findViewById(R.id.answer3).setVisibility(View.INVISIBLE);
-                    isShowingAnswer = false;
-
-                    //change colors
-                    findViewById(R.id.answer1).setBackgroundColor(getResources().getColor(R.color.ans1));
-                    findViewById(R.id.answer2).setBackgroundColor(getResources().getColor(R.color.ans2));
-                    findViewById(R.id.answer3).setBackgroundColor(getResources().getColor(R.color.ans3));
+                    makeInvisible();
+                    makeAllPadsEmpty();
+                    changeAnswerColors();
                 }
             }
         });
     }
 
+    private void setNextCard(){
+        // set the question and answer TextViews with data from the database
+        ((TextView) findViewById(R.id.card_question)).setText(allFlashCards.get(currrentCardDisplayedIndex).getQuestion());
+        ((TextView) findViewById(R.id.answer1)).setText(allFlashCards.get(currrentCardDisplayedIndex).getAnswer());
+        ((TextView) findViewById(R.id.answer2)).setText(allFlashCards.get(currrentCardDisplayedIndex).getWrongAnswer1());
+        ((TextView) findViewById(R.id.answer3)).setText(allFlashCards.get(currrentCardDisplayedIndex).getWrongAnswer2());
+    }
+
+    private void makeAllPadsEmpty(){
+        ((TextView) findViewById(R.id.card_question)).setText("Add a FlashCard");
+        ((TextView) findViewById(R.id.answer1)).setText("");
+        ((TextView) findViewById(R.id.answer2)).setText("");
+        ((TextView) findViewById(R.id.answer3)).setText("");
+    }
+
     private void changeVisibility(){
         if(isShowingAnswer ){
-            findViewById(R.id.answer1).setVisibility(View.INVISIBLE);
-            findViewById(R.id.answer2).setVisibility(View.INVISIBLE);
-            findViewById(R.id.answer3).setVisibility(View.INVISIBLE);
-            isShowingAnswer = false;
-
-            //change colors
-            findViewById(R.id.answer1).setBackgroundColor(getResources().getColor(R.color.ans1));
-            findViewById(R.id.answer2).setBackgroundColor(getResources().getColor(R.color.ans2));
-            findViewById(R.id.answer3).setBackgroundColor(getResources().getColor(R.color.ans3));
-
+            makeInvisible();
+            changeAnswerColors();
         } else {
-            findViewById(R.id.answer1).setVisibility(View.VISIBLE);
-            findViewById(R.id.answer2).setVisibility(View.VISIBLE);
-            findViewById(R.id.answer3).setVisibility(View.VISIBLE);
-
-            isShowingAnswer = true;
+           makeVisible();
         }
     }
+
+    private void changeAnswerColors(){
+        //change colors
+        findViewById(R.id.answer1).setBackgroundColor(getResources().getColor(R.color.ans1));
+        findViewById(R.id.answer2).setBackgroundColor(getResources().getColor(R.color.ans2));
+        findViewById(R.id.answer3).setBackgroundColor(getResources().getColor(R.color.ans3));
+    }
+
+    private void makeInvisible(){
+        findViewById(R.id.answer1).setVisibility(View.INVISIBLE);
+        findViewById(R.id.answer2).setVisibility(View.INVISIBLE);
+        findViewById(R.id.answer3).setVisibility(View.INVISIBLE);
+        isShowingAnswer = false;
+
+        changeAnswerColors();
+    }
+
+    private void makeVisible(){
+        findViewById(R.id.answer1).setVisibility(View.VISIBLE);
+        findViewById(R.id.answer2).setVisibility(View.VISIBLE);
+        findViewById(R.id.answer3).setVisibility(View.VISIBLE);
+
+        isShowingAnswer = true;
+    }
+
 
     private void checkCorrect(TextView t){
         if(answer.equals(t.getText().toString())) {
