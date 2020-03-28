@@ -5,10 +5,10 @@
     <color name="colorAccent">#D81B60</color>
     <color name="mybrown">#DB8C44</color>
     <color name="black">#000000</color>
-    <color name="white">#00FFFFFF</color>
+    <color name="white">#FFFFFF</color>
     <color name="green">#006400</color>
     <color name="red">#8B0000</color>
     <color name="ans1">#c9a579</color>
-    <color name="ans2">#e1cbb2</color>
-    <color name="ans3">#69513f</color>
+    <color name="ans2">#c9a579</color>
+    <color name="ans3">#c9a579</color>
 </resources>

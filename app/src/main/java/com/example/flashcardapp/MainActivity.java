@@ -1,14 +1,18 @@
 package com.example.flashcardapp;
 
+import android.animation.Animator;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -35,13 +39,11 @@ public class MainActivity extends AppCompatActivity {
         allFlashCards = flashcardDatabase.getAllCards();
         countDownTimer = new CountDownTimer(16000, 1000) {
             public void onTick(long millisUntilFinished) {
-                if(millisUntilFinished == 0)
-                    ((TextView) findViewById(R.id.timer)).setText("Time Out!");
-                else
-                    ((TextView) findViewById(R.id.timer)).setText("" + millisUntilFinished / 1000);
+                ((TextView) findViewById(R.id.timer)).setText("" + millisUntilFinished / 1000);
             }
 
             public void onFinish() {
+                ((TextView) findViewById(R.id.timer)).setText("Time Out!");
             }
         };
 
@@ -227,20 +229,43 @@ public class MainActivity extends AppCompatActivity {
 
     private void makeVisible() {
         if (allFlashCards.size() == 0 && !answer.matches("Barack Obama")) return; //if empty don't make visible
-        findViewById(R.id.answer1).setVisibility(View.VISIBLE);
-        findViewById(R.id.answer2).setVisibility(View.VISIBLE);
-        findViewById(R.id.answer3).setVisibility(View.VISIBLE);
+        TextView v = findViewById(R.id.answer1);
+        revealAnim(v);
+        v = findViewById(R.id.answer2);
+        revealAnim(v);
+        v = findViewById(R.id.answer3);
+        revealAnim(v);
 
         isShowingAnswer = true;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private void revealAnim(TextView answerSideView ){
+        // get the center for the clipping circle
+        int cx = answerSideView.getWidth() / 2;
+        int cy = answerSideView.getHeight() / 2;
+
+        // get the final radius for the clipping circle
+        float finalRadius = (float) Math.hypot(cx, cy);
+
+        // create the animator for this view (the start radius is zero)
+        Animator anim = ViewAnimationUtils.createCircularReveal(answerSideView, cx, cy, 0f, finalRadius);
+
+        // hide the question and show the answer to prepare for playing the animation!
+        answerSideView.setVisibility(View.VISIBLE);
+
+        anim.setDuration(1000);
+        anim.start();
+    }
 
     private void checkCorrect(TextView t) {
         if (answer.equals(t.getText().toString())) {
-            t.setBackgroundColor(getResources().getColor(R.color.green));
+            t.setBackgroundColor(getResources().getColor(R.color.white));
             new ParticleSystem(MainActivity.this, 100, R.drawable.confetti, 3000)
                     .setSpeedRange(0.2f, 0.5f)
-                    .oneShot(t, 100);
+                    .oneShot(t, 500);
+            countDownTimer.cancel();
+            ((TextView) findViewById(R.id.timer)).setText("On Time!");
         } else {
             t.setBackgroundColor(getResources().getColor(R.color.red));
         }
