@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
             startTimer();
         } else {
             noFlashCards = true;
+            startTimer();
         }
 
         makeInvisible();
