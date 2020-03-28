@@ -2,13 +2,17 @@ package com.example.flashcardapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.plattysoft.leonids.ParticleSystem;
 
 import java.util.List;
 
@@ -20,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     List<Flashcard> allFlashCards;
     int currrentCardDisplayedIndex = 0;
     boolean noFlashCards;
+    CountDownTimer countDownTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,14 +33,27 @@ public class MainActivity extends AppCompatActivity {
 
         flashcardDatabase = new FlashcardDatabase(getApplicationContext());
         allFlashCards = flashcardDatabase.getAllCards();
+        countDownTimer = new CountDownTimer(16000, 1000) {
+            public void onTick(long millisUntilFinished) {
+                if(millisUntilFinished == 0)
+                    ((TextView) findViewById(R.id.timer)).setText("Time Out!");
+                else
+                    ((TextView) findViewById(R.id.timer)).setText("" + millisUntilFinished / 1000);
+            }
+
+            public void onFinish() {
+            }
+        };
 
         if (allFlashCards != null && allFlashCards.size() > 0) {
             ((TextView) findViewById(R.id.card_question)).setText(allFlashCards.get(0).getQuestion());
             ((TextView) findViewById(R.id.answer1)).setText(allFlashCards.get(0).getAnswer());
             ((TextView) findViewById(R.id.answer2)).setText(allFlashCards.get(0).getWrongAnswer1());
             ((TextView) findViewById(R.id.answer3)).setText(allFlashCards.get(0).getWrongAnswer2());
+            answer = allFlashCards.get(0).getAnswer();
             noFlashCards = false;
-        }else{
+            startTimer();
+        } else {
             noFlashCards = true;
         }
 
@@ -46,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent add = new Intent(MainActivity.this, AddCardActivity.class);
                 MainActivity.this.startActivityForResult(add, 1);
+                overridePendingTransition(R.anim.right_in, R.anim.left_out);
             }
         });
 
@@ -90,17 +109,32 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.next_card).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(allFlashCards.size() > 0){
-                    // advance our pointer index so we can show the next card
-                    currrentCardDisplayedIndex++;
+                if (allFlashCards.size() > 0) {
+                    //get animations
+                    final Animation rightInAnim = AnimationUtils.loadAnimation(v.getContext(), R.anim.right_in);
+                    final Animation leftOutAnim = AnimationUtils.loadAnimation(v.getContext(), R.anim.left_out);
 
-                    // make sure we don't get an IndexOutOfBoundsError if we are viewing the last indexed card in our list
-                    if (currrentCardDisplayedIndex > allFlashCards.size() - 1) {
-                        currrentCardDisplayedIndex = 0;
-                    }
-                    setNextCard();
-                    answer = allFlashCards.get(currrentCardDisplayedIndex).getAnswer();
-                    changeAnswerColors();
+                    leftOutAnim.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+                            // this method is called when the animation first starts
+                            overridePendingTransition(R.anim.left_out_animation, R.anim.right_in);
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            // this method is called when the animation is finished playing
+                            overridePendingTransition(R.anim.left_in, R.anim.right_out);
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+                            // we don't need to worry about this method
+                        }
+                    });
+
+                    nextCard();
+                    findViewById(R.id.card_question).startAnimation(leftOutAnim);
                 }
             }
         });
@@ -111,53 +145,77 @@ public class MainActivity extends AppCompatActivity {
                 flashcardDatabase.deleteCard(((TextView) findViewById(R.id.card_question)).getText().toString());
                 allFlashCards = flashcardDatabase.getAllCards();
 
-                if(allFlashCards.size() != 0){
+                if (allFlashCards.size() != 0) {
                     // make sure we don't get an IndexOutOfBoundsError if we are viewing the last indexed card in our list
                     if (currrentCardDisplayedIndex > allFlashCards.size() - 1) {
                         currrentCardDisplayedIndex = 0;
                     }
                     setNextCard();
-                }else{
+                    makeInvisible();
+                } else {
                     makeInvisible();
                     makeAllPadsEmpty();
                     changeAnswerColors();
+                    ((TextView) findViewById(R.id.timer)).setText("");
                 }
             }
         });
     }
 
-    private void setNextCard(){
+    private void startTimer() {
+        countDownTimer.cancel();
+        countDownTimer.start();
+    }
+    private void nextCard() {
+        // advance our pointer index so we can show the next card
+        currrentCardDisplayedIndex++;
+
+        // make sure we don't get an IndexOutOfBoundsError if we are viewing the last indexed card in our list
+        if (currrentCardDisplayedIndex > allFlashCards.size() - 1) {
+            currrentCardDisplayedIndex = 0;
+        }
+        setNextCard();
+        makeInvisible();
+        answer = allFlashCards.get(currrentCardDisplayedIndex).getAnswer();
+        changeAnswerColors();
+    }
+
+
+    private void setNextCard() {
         // set the question and answer TextViews with data from the database
         ((TextView) findViewById(R.id.card_question)).setText(allFlashCards.get(currrentCardDisplayedIndex).getQuestion());
         ((TextView) findViewById(R.id.answer1)).setText(allFlashCards.get(currrentCardDisplayedIndex).getAnswer());
         ((TextView) findViewById(R.id.answer2)).setText(allFlashCards.get(currrentCardDisplayedIndex).getWrongAnswer1());
         ((TextView) findViewById(R.id.answer3)).setText(allFlashCards.get(currrentCardDisplayedIndex).getWrongAnswer2());
+        answer = allFlashCards.get(currrentCardDisplayedIndex).getAnswer();
+        startTimer();
     }
 
-    private void makeAllPadsEmpty(){
+    private void makeAllPadsEmpty() {
         ((TextView) findViewById(R.id.card_question)).setText("Add a FlashCard");
         ((TextView) findViewById(R.id.answer1)).setText("");
         ((TextView) findViewById(R.id.answer2)).setText("");
         ((TextView) findViewById(R.id.answer3)).setText("");
+        answer = "";
     }
 
-    private void changeVisibility(){
-        if(isShowingAnswer ){
+    private void changeVisibility() {
+        if (isShowingAnswer) {
             makeInvisible();
             changeAnswerColors();
         } else {
-           makeVisible();
+            makeVisible();
         }
     }
 
-    private void changeAnswerColors(){
+    private void changeAnswerColors() {
         //change colors
         findViewById(R.id.answer1).setBackgroundColor(getResources().getColor(R.color.ans1));
         findViewById(R.id.answer2).setBackgroundColor(getResources().getColor(R.color.ans2));
         findViewById(R.id.answer3).setBackgroundColor(getResources().getColor(R.color.ans3));
     }
 
-    private void makeInvisible(){
+    private void makeInvisible() {
         findViewById(R.id.answer1).setVisibility(View.INVISIBLE);
         findViewById(R.id.answer2).setVisibility(View.INVISIBLE);
         findViewById(R.id.answer3).setVisibility(View.INVISIBLE);
@@ -166,7 +224,8 @@ public class MainActivity extends AppCompatActivity {
         changeAnswerColors();
     }
 
-    private void makeVisible(){
+    private void makeVisible() {
+        if (allFlashCards.size() == 0 && !answer.matches("Barack Obama")) return; //if empty don't make visible
         findViewById(R.id.answer1).setVisibility(View.VISIBLE);
         findViewById(R.id.answer2).setVisibility(View.VISIBLE);
         findViewById(R.id.answer3).setVisibility(View.VISIBLE);
@@ -175,17 +234,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void checkCorrect(TextView t){
-        if(answer.equals(t.getText().toString())) {
+    private void checkCorrect(TextView t) {
+        if (answer.equals(t.getText().toString())) {
             t.setBackgroundColor(getResources().getColor(R.color.green));
-        }else{
+            new ParticleSystem(MainActivity.this, 100, R.drawable.confetti, 3000)
+                    .setSpeedRange(0.2f, 0.5f)
+                    .oneShot(t, 100);
+        } else {
             t.setBackgroundColor(getResources().getColor(R.color.red));
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if(requestCode == 1 && resultCode == RESULT_OK){
+        if (requestCode == 1 && resultCode == RESULT_OK) {
 
             String answer1 = data.getExtras().getString("answer1");
             String answer2 = data.getExtras().getString("answer2");
@@ -213,6 +275,7 @@ public class MainActivity extends AppCompatActivity {
                     "Card Successfully Changed!",
                     Snackbar.LENGTH_SHORT)
                     .show();
+            startTimer();
         }
     }
 }
