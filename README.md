@@ -21,4 +21,4 @@ This is an android application that is used to simulate a Flashcard.
 
 ## GIF Walkthrough
 
-<img src="https://imgur.com/IPQ8hco.gif" width=200><br>
+<img src="lab1demo.gif" width=200><br>
