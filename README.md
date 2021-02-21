@@ -18,3 +18,7 @@ This is an android application that is used to simulate a Flashcard.
 - [x] Add selectable multiple choice answers beneath the card
    - [x] Change the background color of the multiple choice answers when clicked to indicate whether the question waanswered correctly
 - [x] Further customize and style the card
+
+## GIF Walkthrough
+
+<img src="https://imgur.com/IPQ8hco.gif" width=200><br>
